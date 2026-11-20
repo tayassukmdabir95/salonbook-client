@@ -5,10 +5,43 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
 
+const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth`
+
 export default function AuthForm({ mode }) {
   const router = useRouter()
   const isSignUp = mode === "sign-up"
-  const [busy, setBusy] = useState(false)
+  const [pending, setPending] = useState(null)
+  const busy = pending !== null
+
+  async function continueWithGoogle() {
+    if (busy) return
+    setPending("google")
+
+    try {
+      const response = await fetch(`${authUrl}/sign-in/social`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider: "google",
+          callbackURL: `${window.location.origin}/dashboard`,
+          errorCallbackURL: `${window.location.origin}/auth-error`,
+          disableRedirect: true,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.url) {
+        throw new Error(result.message || "Could not start Google sign-in.")
+      }
+
+      window.location.assign(result.url)
+    } catch (error) {
+      toast.error(error.message || "Google sign-in is unavailable. Please try again.")
+      setPending(null)
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -41,19 +74,16 @@ export default function AuthForm({ mode }) {
       if (image) payload.image = image
     }
 
-    setBusy(true)
+    setPending("email")
 
     try {
       const endpoint = isSignUp ? "sign-up/email" : "sign-in/email"
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${endpoint}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      )
+      const response = await fetch(`${authUrl}/${endpoint}`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
 
       if (!response.ok) {
         const result = await response.json().catch(() => null)
@@ -66,7 +96,7 @@ export default function AuthForm({ mode }) {
     } catch {
       toast.error("Could not reach SalonBook. Please try again.")
     } finally {
-      setBusy(false)
+      setPending(null)
     }
   }
 
@@ -83,7 +113,18 @@ export default function AuthForm({ mode }) {
           {isSignUp ? "Create your account" : "Sign in to SalonBook"}
         </h1>
 
-        <form onSubmit={handleSubmit} aria-busy={busy}>
+        <button
+          className="google-action"
+          type="button"
+          onClick={continueWithGoogle}
+          disabled={busy}
+        >
+          {pending === "google" ? "Opening Google…" : "Continue with Google"}
+        </button>
+
+        <p className="auth-divider">or use email</p>
+
+        <form onSubmit={handleSubmit} aria-busy={pending === "email"}>
           {isSignUp && (
             <p>
               <label htmlFor="name">Full name</label>
@@ -132,7 +173,7 @@ export default function AuthForm({ mode }) {
           )}
 
           <button className="primary-action" type="submit" disabled={busy}>
-            {busy ? "Please wait…" : isSignUp ? "Create account" : "Sign in"}
+            {pending === "email" ? "Please wait…" : isSignUp ? "Create account" : "Sign in"}
           </button>
         </form>
 

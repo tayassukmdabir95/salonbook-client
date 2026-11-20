@@ -274,3 +274,43 @@ a.primary-action:active {
     transform: none;
   }
 }
+
+
+.google-action {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--plum);
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--plum);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.google-action:hover:enabled {
+  background: var(--plum);
+  color: var(--cream);
+}
+
+.google-action:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block: 1.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
