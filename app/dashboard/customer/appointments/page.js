@@ -91,6 +91,31 @@ export default function MyAppointmentsPage() {
     }
   }
 
+  async function payAppointment(appointment) {
+    setCancellingId(appointment._id)
+
+    try {
+      const response = await fetch(
+        `${apiUrl}/api/customer/appointments/${appointment._id}/checkout`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      )
+
+      const result = await response.json()
+
+      if (!response.ok || !result.url) {
+        throw new Error(result.message || "Could not start payment.")
+      }
+
+      window.location.assign(result.url)
+    } catch (paymentError) {
+      toast.error(paymentError.message || "Could not start payment.")
+      setCancellingId(null)
+    }
+  }
+
   return (
     <main className="appointments-page">
       <Link href="/dashboard/customer">← Customer overview</Link>
@@ -159,6 +184,19 @@ export default function MyAppointmentsPage() {
                         : "Cancel request"}
                     </button>
                   )}
+
+                  {appointment.status === "confirmed" &&
+                    appointment.paymentStatus === "unpaid" && (
+                      <button
+                        type="button"
+                        disabled={cancellingId === appointment._id}
+                        onClick={() => payAppointment(appointment)}
+                      >
+                        {cancellingId === appointment._id
+                          ? "Opening Stripe…"
+                          : "Pay Now"}
+                      </button>
+                    )}
                 </div>
 
                 {expanded && (
