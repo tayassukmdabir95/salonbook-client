@@ -130,6 +130,7 @@ export default function RoleDashboard({ role }) {
               <Link href="/dashboard/admin/services">Manage services</Link>
               <Link href="/dashboard/admin/appointments">Manage appointments</Link>
               <Link href="/dashboard/admin/users">Manage customers</Link>
+               <Link href="/dashboard/admin/transactions">Transactions</Link>
             </>
           )}
 
