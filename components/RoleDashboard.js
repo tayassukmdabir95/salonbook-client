@@ -84,6 +84,12 @@ export default function RoleDashboard({ role }) {
         throw new Error()
       }
 
+
+
+
+      window.dispatchEvent(new Event("salonbook-auth-changed"))
+
+
       toast.success("You have signed out.")
       router.replace("/sign-in")
     } catch {

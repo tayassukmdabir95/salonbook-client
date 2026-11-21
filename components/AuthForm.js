@@ -90,7 +90,10 @@ export default function AuthForm({ mode }) {
         toast.error(result?.message || "Unable to complete your request.")
         return
       }
+      window.dispatchEvent(new Event("salonbook-auth-changed"))
 
+
+      
       toast.success(isSignUp ? "Your account has been created." : "Welcome back!")
       router.replace("/dashboard")
     } catch {
