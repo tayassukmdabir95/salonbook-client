@@ -558,3 +558,489 @@ a.primary-action:active {
     height: 180px;
   }
 }
+
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  background: var(--cream);
+  border-bottom: 1px solid #e6dcd0;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: min(100% - 3rem, 1320px);
+  min-height: 76px;
+  margin: auto;
+}
+
+.site-logo,
+.footer-logo {
+  color: var(--plum);
+  font-family: var(--display);
+  font-size: 1.8rem;
+  letter-spacing: -0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-logo span {
+  color: var(--clay);
+}
+
+.site-nav-links,
+.site-nav-account {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-nav-links a,
+.site-nav-account a {
+  color: var(--ink);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.site-nav-links a:hover,
+.site-nav-account a:hover {
+  color: var(--clay);
+}
+
+.site-nav-account {
+  margin-left: auto;
+}
+
+.site-nav-account .nav-join {
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: var(--leaf);
+}
+
+.account-menu {
+  position: relative;
+}
+
+.account-menu > button {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.account-options {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: grid;
+  min-width: 165px;
+  gap: 0.4rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--cream);
+  box-shadow: 0 16px 35px #301e3226;
+}
+
+.account-options a,
+.account-options button {
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.account-options a:hover,
+.account-options button:hover {
+  background: var(--paper);
+}
+
+.salon-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 640px;
+  background: var(--plum-deep);
+  color: var(--cream);
+}
+
+.salon-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.7rem;
+  padding: clamp(2rem, 7vw, 7rem);
+}
+
+.salon-hero h1 {
+  max-width: 11ch;
+  font-size: clamp(3.8rem, 7vw, 7.5rem);
+}
+
+.salon-hero-content > p:not(.eyebrow) {
+  max-width: 43ch;
+  color: #e5d9db;
+  font-size: 1.08rem;
+}
+
+.eyebrow {
+  color: var(--clay);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.salon-hero .eyebrow {
+  color: var(--leaf);
+}
+
+.hero-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  background: var(--leaf);
+  color: var(--ink);
+  font-weight: 750;
+  text-decoration: none;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.hero-action:hover {
+  background: #e9f6c9;
+  transform: translateY(-3px);
+}
+
+.salon-hero-photo {
+  min-height: 460px;
+  background:
+    linear-gradient(90deg, #28182955, transparent 35%),
+    url("https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1400&q=85")
+    center / cover;
+}
+
+.home-section {
+  width: min(100% - 3rem, 1320px);
+  margin: auto;
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+.home-section h2,
+.category-section h2 {
+  margin: 0.4rem 0 0;
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.section-heading a {
+  font-weight: 700;
+}
+
+.salon-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.salon-card {
+  overflow: hidden;
+  border: 1px solid #dfd1c5;
+  border-radius: 20px;
+  background: var(--cream);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.salon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 35px #301e321a;
+}
+
+.salon-card-image {
+  position: relative;
+  height: 230px;
+}
+
+.salon-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.salon-card-image span {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.salon-card-body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.4rem;
+}
+
+.salon-card-body h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.salon-card-body > p {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 3.1em;
+  color: var(--muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.salon-card-meta {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 0.7rem;
+  border-top: 1px solid var(--line);
+  font-weight: 700;
+}
+
+.salon-card-link {
+  display: flex;
+  justify-content: space-between;
+  color: var(--clay);
+  font-weight: 750;
+}
+
+.category-section {
+  background: var(--plum);
+  color: var(--cream);
+}
+
+.category-section .eyebrow {
+  color: var(--leaf);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.category-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 110px;
+  padding: 1.5rem;
+  border: 1px solid #ffffff55;
+  border-radius: 16px;
+  color: var(--cream);
+  font-family: var(--display);
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.category-tile:hover {
+  background: var(--leaf);
+  color: var(--ink);
+}
+
+.category-number {
+  font-family: var(--body);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.booking-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.story-steps {
+  display: grid;
+}
+
+.story-steps p {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.story-steps span {
+  color: var(--muted);
+}
+
+.browse-page {
+  min-height: 60svh;
+}
+
+.browse-page h1 {
+  margin: 0.5rem 0 2rem;
+}
+
+.service-details {
+  min-height: 65svh;
+}
+
+.service-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  margin-top: 2rem;
+}
+
+.service-details-grid > img {
+  width: 100%;
+  max-height: 600px;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.service-details-grid > div {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.details-meta {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.site-footer {
+  padding: 4rem max(1.5rem, calc((100vw - 1320px) / 2));
+  background: var(--plum-deep);
+  color: var(--cream);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.footer-grid > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.footer-logo,
+.site-footer a {
+  color: var(--cream);
+}
+
+.site-footer h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.site-footer p {
+  color: #d8cbd2;
+}
+
+.footer-bottom {
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ffffff44;
+}
+
+@media (max-width: 900px) {
+  .salon-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .site-nav {
+    width: min(100% - 2rem, 1320px);
+    flex-wrap: wrap;
+    gap: 0.8rem 1rem;
+    padding-block: 0.8rem;
+  }
+
+  .site-nav-links {
+    order: 3;
+    width: 100%;
+  }
+
+  .site-nav-account {
+    margin-left: auto;
+  }
+
+  .site-nav-account .nav-join {
+    display: none;
+  }
+
+  .salon-hero,
+  .booking-story,
+  .service-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .salon-hero-photo {
+    min-height: 300px;
+  }
+
+  .salon-card-grid,
+  .category-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .story-steps p {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .salon-card:hover,
+  .hero-action:hover {
+    transform: none;
+  }
+}
