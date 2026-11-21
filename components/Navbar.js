@@ -104,6 +104,9 @@ export default function Navbar() {
                   >
                     Dashboard
                   </Link>
+                  <Link href="/dashboard/profile" onClick={() => setOpen(false)}>
+                    My profile
+                  </Link>
                   <button type="button" onClick={signOut}>Sign out</button>
                 </div>
               )}
