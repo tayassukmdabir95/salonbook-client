@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import AppointmentForm from "../../../components/AppointmentForm"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -10,6 +11,7 @@ export default function ServiceDetailsPage() {
   const { id } = useParams()
   const router = useRouter()
   const [service, setService] = useState(null)
+  const [role, setRole] = useState(null)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(true)
 
@@ -36,6 +38,18 @@ export default function ServiceDetailsPage() {
           return
         }
 
+        const userResponse = await fetch(`${apiUrl}/api/me`, {
+          credentials: "include",
+          cache: "no-store",
+          signal: controller.signal,
+        })
+
+        if (!userResponse.ok) {
+          throw new Error()
+        }
+
+        const userResult = await userResponse.json()
+        setRole(userResult.user.role)
         setService(result.service)
       } catch {
         if (!controller.signal.aborted) {
@@ -58,19 +72,27 @@ export default function ServiceDetailsPage() {
       {error && <p role="alert">{error}</p>}
 
       {service && (
-        <div className="service-details-grid">
-          <img src={service.image} alt={service.serviceName} />
-          <div>
-            <p className="eyebrow">{service.category}</p>
-            <h1>{service.serviceName}</h1>
-            <p>{service.description}</p>
-            <div className="details-meta">
-              <span>${Number(service.price).toFixed(2)}</span>
-              <span>{service.duration} minutes</span>
+        <>
+          <div className="service-details-grid">
+            <img src={service.image} alt={service.serviceName} />
+            <div>
+              <p className="eyebrow">{service.category}</p>
+              <h1>{service.serviceName}</h1>
+              <p>{service.description}</p>
+              <div className="details-meta">
+                <span>${Number(service.price).toFixed(2)}</span>
+                <span>{service.duration} minutes</span>
+              </div>
+              <a className="primary-action" href="#booking">
+                {role === "admin" ? "View appointment options" : "Request an appointment"}
+              </a>
             </div>
-            <p>Appointment requests will open with the booking form in Step 8.</p>
           </div>
-        </div>
+
+          <div id="booking">
+            <AppointmentForm serviceId={service._id} role={role} />
+          </div>
+        </>
       )}
     </main>
   )

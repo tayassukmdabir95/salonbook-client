@@ -1124,3 +1124,55 @@ a.primary-action:active {
     grid-template-columns: 1fr;
   }
 }
+
+.booking-panel {
+  width: min(100%, 700px);
+  margin: 5rem auto 0;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--paper);
+}
+
+.booking-panel h2 {
+  margin: 0.5rem 0 1.5rem;
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.booking-panel form {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.booking-panel label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 700;
+}
+
+.booking-panel input,
+.booking-panel select,
+.booking-panel textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--ink);
+  font: inherit;
+}
+
+.booking-panel button {
+  justify-self: start;
+}
+
+.booking-panel p + a {
+  margin-top: 1.5rem;
+}
+
+#booking {
+  scroll-margin-top: 2rem;
+}
