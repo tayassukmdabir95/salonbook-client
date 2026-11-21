@@ -1517,4 +1517,52 @@ a.primary-action:active {
 .profile-form button {
   justify-self: start;
 }
+.site-message-page {
+  display: flex;
+  min-height: 65svh;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.2rem;
+  width: min(100% - 3rem, 900px);
+  margin-inline: auto;
+  padding-block: 5rem;
+}
 
+.site-message-page h1 {
+  max-width: 12ch;
+}
+
+.site-message-page > p:not(.eyebrow) {
+  max-width: 48ch;
+  color: var(--muted);
+}
+
+.site-message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.3rem;
+  margin-top: 1rem;
+}
+
+.loading-mark {
+  color: var(--clay);
+  font-family: var(--display);
+  font-size: 4rem;
+  line-height: 1;
+  animation: salon-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes salon-pulse {
+  50% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-mark {
+    animation: none;
+  }
+}

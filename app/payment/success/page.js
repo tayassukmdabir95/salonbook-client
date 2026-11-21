@@ -49,9 +49,13 @@ function PaymentResult() {
 
         if (attempts < 10) {
           timer = setTimeout(checkPayment, 2000)
+        } else {
+          setStatus("delayed")
         }
       } catch (checkError) {
-        if (!stopped) setError(checkError.message)
+        if (!stopped) {
+          setError(checkError.message)
+        }
       }
     }
 
@@ -66,18 +70,29 @@ function PaymentResult() {
   return (
     <main className="studio-page">
       <p className="eyebrow">SalonBook payment</p>
-      <h1>{status === "paid" ? "Payment confirmed" : "Checking your payment"}</h1>
+      <h1>
+        {status === "paid" ? "Payment confirmed" : "Checking your payment"}
+      </h1>
+
       {error ? (
         <p role="alert">{error}</p>
       ) : status === "paid" ? (
         <p>Your appointment payment has been recorded.</p>
+      ) : status === "delayed" ? (
+        <p role="status">
+          Confirmation is taking longer than expected. Check My Appointments
+          again shortly. Payment status updates only after Stripe confirms it.
+        </p>
       ) : (
         <p role="status">
-          Stripe has returned you to SalonBook. Check My Appointments if
-          confirmation takes a little longer.
+          Stripe has returned you to SalonBook. We’re checking your payment.
         </p>
       )}
-      <Link className="primary-action" href="/dashboard/customer/appointments">
+
+      <Link
+        className="primary-action"
+        href="/dashboard/customer/appointments"
+      >
         View my appointments
       </Link>
     </main>
