@@ -18,40 +18,25 @@ export default function ServiceDetailsPage() {
 
     async function loadDetails() {
       try {
-        const userResponse = await fetch(`${apiUrl}/api/me`, {
+        const response = await fetch(`${apiUrl}/api/services/${id}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
         })
 
-        if (userResponse.status === 401) {
+        if (response.status === 401) {
           router.replace("/sign-in")
           return
         }
 
-        if (userResponse.status === 403) {
-          setError("This account cannot access service details.")
-          return
-        }
-
-        if (!userResponse.ok) throw new Error()
-
-        const response = await fetch(`${apiUrl}/api/services`, {
-          cache: "no-store",
-          signal: controller.signal,
-        })
-
-        if (!response.ok) throw new Error()
-
         const result = await response.json()
-        const found = result.services.find((item) => item._id === id)
 
-        if (!found) {
-          setError("This service is unavailable or the link is invalid.")
+        if (!response.ok) {
+          setError(result.message || "Could not load this service.")
           return
         }
 
-        setService(found)
+        setService(result.service)
       } catch {
         if (!controller.signal.aborted) {
           setError("Could not load this service. Refresh to try again.")
@@ -68,8 +53,10 @@ export default function ServiceDetailsPage() {
   return (
     <main className="home-section service-details">
       <Link href="/services">← Browse services</Link>
+
       {loading && <p role="status">Loading service details…</p>}
       {error && <p role="alert">{error}</p>}
+
       {service && (
         <div className="service-details-grid">
           <img src={service.image} alt={service.serviceName} />
