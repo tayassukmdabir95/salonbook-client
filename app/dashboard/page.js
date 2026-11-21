@@ -2,98 +2,56 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import toast from "react-hot-toast"
 
-const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth`
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function DashboardPage() {
   const router = useRouter()
-  const [user, setUser] = useState(null)
   const [error, setError] = useState("")
-  const [signingOut, setSigningOut] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
 
-    async function loadSession() {
+    async function findDashboard() {
       try {
-        const response = await fetch(`${authUrl}/get-session`, {
+        const response = await fetch(`${apiUrl}/api/me`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
         })
 
-        if (!response.ok) throw new Error()
-
-        const session = await response.json()
-
-        if (!session?.user) {
+        if (response.status === 401) {
           router.replace("/sign-in")
           return
         }
 
-        setUser(session.user)
+        const result = await response.json()
+
+        if (response.status === 403) {
+          setError(result.message)
+          return
+        }
+
+        if (!response.ok) {
+          throw new Error()
+        }
+
+        const destination = result.user.role === "admin" ? "admin" : "customer"
+        router.replace(`/dashboard/${destination}`)
       } catch {
         if (!controller.signal.aborted) {
-          setError("Could not load your session. Refresh to try again.")
+          setError("Could not load your dashboard. Refresh to try again.")
         }
       }
     }
 
-    loadSession()
+    findDashboard()
     return () => controller.abort()
   }, [router])
 
-  async function signOut() {
-    setSigningOut(true)
-
-    try {
-      const response = await fetch(`${authUrl}/sign-out`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      })
-
-      if (!response.ok) throw new Error()
-
-      toast.success("You have signed out.")
-      router.replace("/sign-in")
-    } catch {
-      toast.error("Sign-out failed. Please try again.")
-      setSigningOut(false)
-    }
-  }
-
-  if (error) {
-    return (
-      <main className="studio-page">
-        <p role="alert">{error}</p>
-      </main>
-    )
-  }
-
-  if (!user) {
-    return (
-      <main className="studio-page">
-        <p role="status">Loading your session…</p>
-      </main>
-    )
-  }
-
   return (
     <main className="studio-page">
-      <h1>Dashboard</h1>
-      <p>Welcome, {user.name}.</p>
-      <p>Signed in as {user.email}</p>
-      <button
-        className="primary-action"
-        type="button"
-        onClick={signOut}
-        disabled={signingOut}
-      >
-        {signingOut ? "Signing out…" : "Sign out"}
-      </button>
+      {error ? <p role="alert">{error}</p> : <p role="status">Opening your dashboard…</p>}
     </main>
   )
 }
