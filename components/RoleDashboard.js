@@ -137,9 +137,7 @@ export default function RoleDashboard({ role }) {
           <Link href="/dashboard/profile">My profile</Link>
         </nav>
 
-        <button type="button" onClick={signOut} disabled={signingOut}>
-          {signingOut ? "Signing out…" : "Sign out"}
-        </button>
+        
       </aside>
 
       <main className="dashboard-content">

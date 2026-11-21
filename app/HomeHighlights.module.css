@@ -1,0 +1,172 @@
+
+.featured {
+  position: relative;
+  padding: 65px max(24px, calc((100% - 1320px) / 2));
+  background: #fff8ef;
+}
+
+.featured :global(.section-heading) {
+  margin-bottom: 28px;
+}
+
+.featured :global(.section-heading a) {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 19px;
+  border: 1px solid #e2c9cc;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #79485c;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.featured :global(.section-heading a:hover) {
+  background: #402440;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.featured :global(.salon-card-grid) {
+  gap: 18px;
+}
+
+.featured :global(.salon-card) {
+  border: 1px solid #eadbd4;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 5px 18px rgba(48, 30, 50, 0.035);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured :global(.salon-card:hover) {
+  transform: translateY(-7px);
+  box-shadow: 0 18px 38px rgba(48, 30, 50, 0.12);
+}
+
+.featured :global(.salon-card-image) {
+  height: 205px;
+  overflow: hidden;
+}
+
+.featured :global(.salon-card-image img) {
+  transition: transform 0.45s ease;
+}
+
+.featured :global(.salon-card:hover .salon-card-image img) {
+  transform: scale(1.07);
+}
+
+.featured :global(.salon-card-image span) {
+  background: #f4e1eb;
+  color: #754364;
+  border: 1px solid #ecd0df;
+  font-size: 0.75rem;
+}
+
+.featured :global(.salon-card-body) {
+  gap: 10px;
+  padding: 19px;
+}
+
+.featured :global(.salon-card-body h3) {
+  font-size: 1.45rem;
+}
+
+.featured :global(.salon-card-body > p) {
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.featured :global(.salon-card-meta) {
+  color: #754364;
+  font-size: 0.9rem;
+}
+
+.featured :global(.salon-card-link) {
+  align-items: center;
+  padding: 11px 15px;
+  border-radius: 12px;
+  background: #e9f0d8;
+  color: #425538;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.featured :global(.salon-card-link:hover) {
+  background: #402440;
+  color: white;
+}
+
+.story {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 75px max(24px, calc((100% - 1320px) / 2));
+  background: #eaf0dd;
+}
+
+.story :global(.eyebrow) {
+  color: #66804b;
+}
+
+.story :global(.story-steps) {
+  display: grid;
+  gap: 12px;
+}
+
+.story :global(.story-steps p) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 19px;
+  border: 1px solid #d2dfc1;
+  border-radius: 16px;
+  background: #f9fcf3;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.story :global(.story-steps p:hover) {
+  transform: translateX(5px);
+  box-shadow: 0 8px 22px rgba(66, 85, 56, 0.09);
+}
+
+.story :global(.story-steps strong) {
+  color: #405936;
+}
+
+.story :global(.story-steps span) {
+  color: #718066;
+}
+
+@media (max-width: 720px) {
+  .featured,
+  .story {
+    padding: 50px 18px;
+  }
+
+  .featured :global(.salon-card-image) {
+    height: 195px;
+  }
+
+  .story :global(.story-steps p) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured :global(.salon-card),
+  .featured :global(.salon-card-image img),
+  .featured :global(.salon-card-link),
+  .story :global(.story-steps p) {
+    transition: none;
+  }
+
+  .featured :global(.salon-card:hover),
+  .featured :global(.salon-card:hover .salon-card-image img),
+  .story :global(.story-steps p:hover) {
+    transform: none;
+  }
+}
