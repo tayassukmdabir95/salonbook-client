@@ -1340,3 +1340,106 @@ a.primary-action:active {
     grid-template-columns: 1fr;
   }
 }
+.admin-table-page {
+  min-height: 100svh;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  background: var(--cream);
+}
+
+.admin-table-page > .eyebrow {
+  margin-top: 2rem;
+}
+
+.admin-table-page h1 {
+  margin: 0.5rem 0 2rem;
+}
+
+.admin-record-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-record {
+  display: grid;
+  gap: 1.3rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--paper);
+}
+
+.admin-record-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-record h2 {
+  margin: 0.25rem 0;
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.admin-record-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem 2rem;
+}
+
+.admin-record-facts p,
+.user-record p {
+  overflow-wrap: anywhere;
+  color: var(--muted);
+}
+
+.admin-record-facts strong {
+  display: inline-block;
+  min-width: 90px;
+  color: var(--ink);
+}
+
+.user-record {
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.user-record img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-record button {
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--plum);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--plum);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-record button:hover:enabled {
+  background: var(--plum);
+  color: var(--cream);
+}
+
+.user-record button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+@media (max-width: 720px) {
+  .admin-record-facts,
+  .user-record {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-record-heading {
+    flex-direction: column;
+  }
+}

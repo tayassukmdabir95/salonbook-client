@@ -115,6 +115,7 @@ export default function RoleDashboard({ role }) {
       <aside className="dashboard-sidebar">
         <Link className="wordmark" href="/">SalonBook</Link>
         <p>{role === "admin" ? "Admin dashboard" : "Customer dashboard"}</p>
+
         <nav aria-label="Dashboard navigation">
           <Link href={`/dashboard/${role}`} aria-current="page">
             Overview
@@ -125,9 +126,14 @@ export default function RoleDashboard({ role }) {
           )}
 
           {role === "admin" && (
-            <Link href="/dashboard/admin/services">Manage services</Link>
+            <>
+              <Link href="/dashboard/admin/services">Manage services</Link>
+              <Link href="/dashboard/admin/appointments">Manage appointments</Link>
+              <Link href="/dashboard/admin/users">Manage customers</Link>
+            </>
           )}
         </nav>
+
         <button type="button" onClick={signOut} disabled={signingOut}>
           {signingOut ? "Signing out…" : "Sign out"}
         </button>
@@ -142,24 +148,54 @@ export default function RoleDashboard({ role }) {
 
         <div className="dashboard-stats">
           {role === "admin" ? (
-            <div className="dashboard-stat">
-              <span>Registered customers</span>
-              <strong>{overview.totalCustomers}</strong>
-            </div>
+            <>
+              <div className="dashboard-stat">
+                <span>Registered customers</span>
+                <strong>{overview.totalCustomers}</strong>
+              </div>
+
+              <div className="dashboard-stat">
+                <span>Active services</span>
+                <strong>{overview.totalActiveServices}</strong>
+              </div>
+
+              <div className="dashboard-stat">
+                <span>Total requests</span>
+                <strong>{overview.totalAppointments}</strong>
+              </div>
+
+              <div className="dashboard-stat">
+                <span>Pending</span>
+                <strong>{overview.pendingAppointments}</strong>
+              </div>
+
+              <div className="dashboard-stat">
+                <span>Confirmed</span>
+                <strong>{overview.confirmedAppointments}</strong>
+              </div>
+
+              <div className="dashboard-stat">
+                <span>Successful payments</span>
+                <strong>{overview.totalSuccessfulPayments}</strong>
+              </div>
+            </>
           ) : (
             <>
               <div className="dashboard-stat">
                 <span>Total requests</span>
                 <strong>{overview.totalAppointments}</strong>
               </div>
+
               <div className="dashboard-stat">
                 <span>Pending</span>
                 <strong>{overview.pendingAppointments}</strong>
               </div>
+
               <div className="dashboard-stat">
                 <span>Confirmed</span>
                 <strong>{overview.confirmedAppointments}</strong>
               </div>
+
               <div className="dashboard-stat">
                 <span>Cancelled</span>
                 <strong>{overview.cancelledAppointments}</strong>
