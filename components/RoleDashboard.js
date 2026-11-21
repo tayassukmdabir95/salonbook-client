@@ -84,11 +84,7 @@ export default function RoleDashboard({ role }) {
         throw new Error()
       }
 
-
-
-
       window.dispatchEvent(new Event("salonbook-auth-changed"))
-
 
       toast.success("You have signed out.")
       router.replace("/sign-in")
@@ -123,6 +119,11 @@ export default function RoleDashboard({ role }) {
           <Link href={`/dashboard/${role}`} aria-current="page">
             Overview
           </Link>
+
+          {role === "customer" && (
+            <Link href="/dashboard/customer/appointments">My appointments</Link>
+          )}
+
           {role === "admin" && (
             <Link href="/dashboard/admin/services">Manage services</Link>
           )}
@@ -138,13 +139,33 @@ export default function RoleDashboard({ role }) {
         </p>
         <h1>Welcome, {user.name}</h1>
         <p>{user.email}</p>
-        <div className="dashboard-stat">
-          <span>{role === "admin" ? "Registered customers" : "My appointments"}</span>
-          <strong>
-            {role === "admin"
-              ? overview.totalCustomers
-              : overview.totalAppointments}
-          </strong>
+
+        <div className="dashboard-stats">
+          {role === "admin" ? (
+            <div className="dashboard-stat">
+              <span>Registered customers</span>
+              <strong>{overview.totalCustomers}</strong>
+            </div>
+          ) : (
+            <>
+              <div className="dashboard-stat">
+                <span>Total requests</span>
+                <strong>{overview.totalAppointments}</strong>
+              </div>
+              <div className="dashboard-stat">
+                <span>Pending</span>
+                <strong>{overview.pendingAppointments}</strong>
+              </div>
+              <div className="dashboard-stat">
+                <span>Confirmed</span>
+                <strong>{overview.confirmedAppointments}</strong>
+              </div>
+              <div className="dashboard-stat">
+                <span>Cancelled</span>
+                <strong>{overview.cancelledAppointments}</strong>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>
