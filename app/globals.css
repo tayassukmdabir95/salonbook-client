@@ -341,10 +341,15 @@ a.primary-action:active {
 .dashboard-sidebar nav a {
   padding: 0.8rem 1rem;
   border-radius: 12px;
-  background: var(--leaf);
-  color: var(--ink);
+  color: var(--cream);
   font-weight: 700;
   text-decoration: none;
+}
+
+.dashboard-sidebar nav a:hover,
+.dashboard-sidebar nav a[aria-current="page"] {
+  background: var(--leaf);
+  color: var(--ink);
 }
 
 .dashboard-sidebar button {
@@ -413,5 +418,143 @@ a.primary-action:active {
 
   .dashboard-sidebar button {
     margin-top: 0;
+  }
+}
+
+
+.services-admin {
+  min-height: 100svh;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  background: var(--cream);
+}
+
+.services-admin h1 {
+  margin: 1rem 0 2rem;
+}
+
+.service-form,
+.service-list {
+  width: min(100%, 900px);
+  margin-bottom: 3rem;
+}
+
+.service-form {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper);
+}
+
+.service-form h2,
+.service-list h2 {
+  margin: 0 0 0.5rem;
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.service-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 650;
+}
+
+.service-form input,
+.service-form select,
+.service-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--ink);
+  font: inherit;
+}
+
+.service-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.service-preview {
+  width: min(100%, 320px);
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.service-form-actions,
+.service-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.service-form-actions button,
+.service-card-actions button {
+  cursor: pointer;
+}
+
+.service-admin-card {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+}
+
+.service-admin-card img {
+  width: 110px;
+  height: 90px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.service-admin-card h3 {
+  margin: 0;
+}
+
+.service-admin-card p {
+  color: var(--muted);
+}
+
+.service-status {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--clay);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.service-card-actions button {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--plum);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--plum);
+}
+
+.service-card-actions button:hover:enabled {
+  background: var(--plum);
+  color: var(--cream);
+}
+
+@media (max-width: 720px) {
+  .service-form-row,
+  .service-admin-card {
+    grid-template-columns: 1fr;
+  }
+
+  .service-admin-card img {
+    width: 100%;
+    height: 180px;
   }
 }

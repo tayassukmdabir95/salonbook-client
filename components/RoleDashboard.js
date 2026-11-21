@@ -117,6 +117,9 @@ export default function RoleDashboard({ role }) {
           <Link href={`/dashboard/${role}`} aria-current="page">
             Overview
           </Link>
+          {role === "admin" && (
+            <Link href="/dashboard/admin/services">Manage services</Link>
+          )}
         </nav>
         <button type="button" onClick={signOut} disabled={signingOut}>
           {signingOut ? "Signing out…" : "Sign out"}
