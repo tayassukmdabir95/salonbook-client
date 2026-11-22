@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import ProfilePhotoInput from "./ProfilePhotoInput"
+import PasswordInput from "./PasswordInput"
 import { uploadProfilePhoto } from "../lib/uploadProfilePhoto"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -14,13 +15,16 @@ const authUrl = `${apiUrl}/api/auth`
 export default function AuthForm({ mode }) {
   const router = useRouter()
   const isSignUp = mode === "sign-up"
+
   const [pending, setPending] = useState(null)
   const [image, setImage] = useState("")
   const [imageFile, setImageFile] = useState(null)
+
   const busy = pending !== null
 
   async function continueWithGoogle() {
     if (busy) return
+
     setPending("google")
 
     try {
@@ -51,11 +55,14 @@ export default function AuthForm({ mode }) {
 
   async function handleSubmit(event) {
     event.preventDefault()
+
     if (busy) return
 
     const form = new FormData(event.currentTarget)
+
     const email = String(form.get("email") || "").trim()
     const password = String(form.get("password") || "")
+
     const payload = { email, password }
 
     if (isSignUp) {
@@ -71,7 +78,9 @@ export default function AuthForm({ mode }) {
         !/[A-Z]/.test(password) ||
         !/[a-z]/.test(password)
       ) {
-        toast.error("Use at least 6 characters with uppercase and lowercase letters.")
+        toast.error(
+          "Use at least 6 characters with uppercase and lowercase letters."
+        )
         return
       }
 
@@ -131,10 +140,14 @@ export default function AuthForm({ mode }) {
       window.dispatchEvent(new Event("salonbook-auth-changed"))
 
       if (photoUploadFailed) {
-        toast.error("Account created, but the photo could not be saved. Update it in My Profile.")
+        toast.error(
+          "Account created, but the photo could not be saved. Update it in My Profile."
+        )
       } else {
         toast.success(
-          isSignUp ? "Your account has been created." : "Welcome back!"
+          isSignUp
+            ? "Your account has been created."
+            : "Welcome back!"
         )
       }
 
@@ -165,7 +178,9 @@ export default function AuthForm({ mode }) {
           onClick={continueWithGoogle}
           disabled={busy}
         >
-          {pending === "google" ? "Opening Google…" : "Continue with Google"}
+          {pending === "google"
+            ? "Opening Google…"
+            : "Continue with Google"}
         </button>
 
         <p className="auth-divider">or use email</p>
@@ -196,17 +211,13 @@ export default function AuthForm({ mode }) {
 
           <p>
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete={isSignUp ? "new-password" : "current-password"}
-              aria-describedby={isSignUp ? "password-help" : undefined}
-              required
-            />
+
+            <PasswordInput isSignUp={isSignUp} />
+
             {isSignUp && (
               <small id="password-help">
-                Use at least 6 characters, including an uppercase and lowercase letter.
+                Use at least 6 characters, including an uppercase
+                and lowercase letter.
               </small>
             )}
           </p>
@@ -220,7 +231,11 @@ export default function AuthForm({ mode }) {
             />
           )}
 
-          <button className="primary-action" type="submit" disabled={busy}>
+          <button
+            className="primary-action"
+            type="submit"
+            disabled={busy}
+          >
             {pending === "upload"
               ? "Saving your photo…"
               : pending === "email"
@@ -232,7 +247,10 @@ export default function AuthForm({ mode }) {
         </form>
 
         <p className="auth-switch">
-          {isSignUp ? "Already have an account? " : "New to SalonBook? "}
+          {isSignUp
+            ? "Already have an account? "
+            : "New to SalonBook? "}
+
           <Link href={isSignUp ? "/sign-in" : "/sign-up"}>
             {isSignUp ? "Sign in" : "Create an account"}
           </Link>

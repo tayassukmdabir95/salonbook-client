@@ -2188,4 +2188,33 @@ html {
 }
 
 
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.auth-panel .password-field input {
+  width: 100%;
+  padding-right: 75px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #f1e7ed;
+  color: #65445e;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.password-toggle:hover {
+  background: #e5d2df;
+}
+
 

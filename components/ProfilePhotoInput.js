@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import styles from "./ProfilePhotoInput.module.css"
 
@@ -13,6 +13,7 @@ export default function ProfilePhotoInput({
 }) {
   const [mode, setMode] = useState("upload")
   const [preview, setPreview] = useState("")
+  const fileInputRef = useRef(null)
 
   useEffect(() => {
     if (!file) {
@@ -26,6 +27,19 @@ export default function ProfilePhotoInput({
     return () => URL.revokeObjectURL(objectUrl)
   }, [file, value])
 
+  function clearFileInput() {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  function removePhoto() {
+    clearFileInput()
+    onFileChange(null)
+    onChange("")
+    setPreview("")
+  }
+
   function chooseFile(event) {
     const selected = event.target.files?.[0]
 
@@ -35,13 +49,13 @@ export default function ProfilePhotoInput({
 
     if (!allowed.includes(selected.type)) {
       toast.error("Choose a JPG, PNG or WebP image.")
-      event.target.value = ""
+      clearFileInput()
       return
     }
 
     if (selected.size > 5 * 1024 * 1024) {
       toast.error("Image must be smaller than 5 MB.")
-      event.target.value = ""
+      clearFileInput()
       return
     }
 
@@ -52,6 +66,7 @@ export default function ProfilePhotoInput({
     setMode(nextMode)
 
     if (nextMode === "url") {
+      clearFileInput()
       onFileChange(null)
     }
   }
@@ -59,20 +74,32 @@ export default function ProfilePhotoInput({
   return (
     <div className={styles.wrapper}>
       <div className={styles.heading}>
-        <div className={styles.preview}>
-          {preview ? (
-            <img
-              src={preview}
-              alt="Profile photo preview"
-              onError={(event) => {
-                event.currentTarget.style.display = "none"
-              }}
-              onLoad={(event) => {
-                event.currentTarget.style.display = "block"
-              }}
-            />
-          ) : (
-            <span aria-hidden="true">SB</span>
+        <div className={styles.previewWrapper}>
+          <div className={styles.preview}>
+            {preview ? (
+              <img
+                key={preview}
+                src={preview}
+                alt="Profile photo preview"
+                onError={(event) => {
+                  event.currentTarget.style.display = "none"
+                }}
+              />
+            ) : (
+              <span aria-hidden="true">SB</span>
+            )}
+          </div>
+
+          {(file || value) && (
+            <button
+              type="button"
+              className={styles.removePhoto}
+              aria-label="Remove profile photo"
+              title="Remove photo"
+              onClick={removePhoto}
+            >
+              ×
+            </button>
           )}
         </div>
 
@@ -105,25 +132,25 @@ export default function ProfilePhotoInput({
       {mode === "upload" ? (
         <div className={styles.uploadArea}>
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/jpeg,image/png,image/webp"
             onChange={chooseFile}
             aria-label="Choose profile image"
           />
-          <span>{file ? file.name : "Choose a profile picture"}</span>
+
+          <span>
+            {file ? file.name : "Choose a profile picture"}
+          </span>
+
           <small>JPG, PNG, WebP • Maximum 5 MB</small>
-          {file && (
-            <button type="button" onClick={() => onFileChange(null)}>
-              Remove selection
-            </button>
-          )}
         </div>
       ) : (
         <label className={styles.urlField}>
           Image URL
           <input
             type="url"
-            value={value}
+            value={value || ""}
             onChange={(event) => onChange(event.target.value)}
             placeholder="https://example.com/photo.jpg"
           />
