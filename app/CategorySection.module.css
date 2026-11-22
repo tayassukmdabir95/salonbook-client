@@ -406,3 +406,29 @@
     transform: none;
   }
 }
+
+
+
+
+
+.section {
+  width: min(100% - 64px, 1320px);
+  margin: 24px auto;
+  border-radius: 30px;
+}
+
+.container {
+  width: 100%;
+  padding: 70px 48px 48px;
+}
+
+@media (max-width: 720px) {
+  .section {
+    width: calc(100% - 36px);
+    border-radius: 20px;
+  }
+
+  .container {
+    padding: 45px 20px;
+  }
+}

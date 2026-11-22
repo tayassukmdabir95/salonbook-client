@@ -1,9 +1,12 @@
+
 "use client"
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
+import ProfilePhotoInput from "../../../components/ProfilePhotoInput"
+import { uploadProfilePhoto } from "../../../lib/uploadProfilePhoto"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -15,6 +18,7 @@ export default function ProfilePage() {
     image: "",
     phone: "",
   })
+  const [imageFile, setImageFile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
@@ -37,14 +41,11 @@ export default function ProfilePage() {
 
         const result = await response.json()
 
-        if (response.status === 403) {
-          setError(result.message)
-          return
+        if (!response.ok) {
+          throw new Error(result.message || "Could not load your profile.")
         }
 
-        if (!response.ok) {
-          throw new Error(result.message)
-        }
+        if (controller.signal.aborted) return
 
         setProfile(result.user)
         setForm({
@@ -62,34 +63,57 @@ export default function ProfilePage() {
     }
 
     loadProfile()
+
     return () => controller.abort()
   }, [router])
 
   function changeField(event) {
-    setForm({ ...form, [event.target.name]: event.target.value })
+    setForm((current) => ({
+      ...current,
+      [event.target.name]: event.target.value,
+    }))
   }
 
   async function saveProfile(event) {
     event.preventDefault()
+    if (saving) return
+
     setSaving(true)
 
     try {
+      let image = form.image.trim()
+
+      if (imageFile) {
+        image = await uploadProfilePhoto(imageFile)
+      }
+
       const response = await fetch(`${apiUrl}/api/profile`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          image,
+          phone: form.phone,
+        }),
       })
 
-      const result = await response.json()
+      const result = await response.json().catch(() => null)
 
       if (!response.ok) {
-        throw new Error(result.message)
+        throw new Error(result?.message || "Could not save your profile.")
       }
 
       setProfile(result.user)
+      setForm({
+        name: result.user.name || "",
+        image: result.user.image || "",
+        phone: result.user.phone || "",
+      })
+      setImageFile(null)
+
       window.dispatchEvent(new Event("salonbook-auth-changed"))
-      toast.success("Profile updated.")
+      toast.success("Profile updated successfully!")
     } catch (saveError) {
       toast.error(saveError.message || "Could not save your profile.")
     } finally {
@@ -106,7 +130,7 @@ export default function ProfilePage() {
       <div className="profile-heading">
         <p className="eyebrow">Your account</p>
         <h1>My profile</h1>
-        <p>Update how SalonBook shows your name and contact information.</p>
+        <p>Personalize your SalonBook profile and contact information.</p>
       </div>
 
       {loading && <p role="status">Loading your profile…</p>}
@@ -115,18 +139,18 @@ export default function ProfilePage() {
       {profile && (
         <form className="profile-form" onSubmit={saveProfile}>
           <div className="profile-identity">
-            {form.image ? (
-              <img src={form.image} alt="Your profile preview" />
-            ) : (
-              <span aria-hidden="true">
-                {form.name.trim().charAt(0).toUpperCase() || "S"}
-              </span>
-            )}
             <div>
               <strong>{profile.email}</strong>
               <p>{profile.role === "admin" ? "Administrator" : "Customer"}</p>
             </div>
           </div>
+
+          <ProfilePhotoInput
+            value={form.image}
+            onChange={(image) => setForm((current) => ({ ...current, image }))}
+            file={imageFile}
+            onFileChange={setImageFile}
+          />
 
           <label>
             Full name
@@ -141,17 +165,6 @@ export default function ProfilePage() {
           </label>
 
           <label>
-            Profile image URL
-            <input
-              name="image"
-              type="url"
-              value={form.image}
-              onChange={changeField}
-              placeholder="https://example.com/photo.jpg"
-            />
-          </label>
-
-          <label>
             Phone number
             <input
               name="phone"
@@ -159,12 +172,12 @@ export default function ProfilePage() {
               value={form.phone}
               onChange={changeField}
               maxLength={30}
-              placeholder="+1 555 123 4567"
+              placeholder="+880 1XXXXXXXXX"
             />
           </label>
 
           <button className="primary-action" type="submit" disabled={saving}>
-            {saving ? "Saving…" : "Save profile"}
+            {saving ? "Saving profile…" : "Save Profile"}
           </button>
         </form>
       )}

@@ -1,16 +1,22 @@
+
 "use client"
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
+import ProfilePhotoInput from "./ProfilePhotoInput"
+import { uploadProfilePhoto } from "../lib/uploadProfilePhoto"
 
-const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth`
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const authUrl = `${apiUrl}/api/auth`
 
 export default function AuthForm({ mode }) {
   const router = useRouter()
   const isSignUp = mode === "sign-up"
   const [pending, setPending] = useState(null)
+  const [image, setImage] = useState("")
+  const [imageFile, setImageFile] = useState(null)
   const busy = pending !== null
 
   async function continueWithGoogle() {
@@ -24,7 +30,7 @@ export default function AuthForm({ mode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           provider: "google",
-          callbackURL: `${window.location.origin}/dashboard`,
+          callbackURL: `${window.location.origin}/`,
           errorCallbackURL: `${window.location.origin}/auth-error`,
           disableRedirect: true,
         }),
@@ -38,7 +44,7 @@ export default function AuthForm({ mode }) {
 
       window.location.assign(result.url)
     } catch (error) {
-      toast.error(error.message || "Google sign-in is unavailable. Please try again.")
+      toast.error(error.message || "Google sign-in is unavailable.")
       setPending(null)
     }
   }
@@ -48,13 +54,12 @@ export default function AuthForm({ mode }) {
     if (busy) return
 
     const form = new FormData(event.currentTarget)
-    const email = form.get("email").trim()
-    const password = form.get("password")
+    const email = String(form.get("email") || "").trim()
+    const password = String(form.get("password") || "")
     const payload = { email, password }
 
     if (isSignUp) {
-      const name = form.get("name").trim()
-      const image = form.get("image").trim()
+      const name = String(form.get("name") || "").trim()
 
       if (!name) {
         toast.error("Enter your full name.")
@@ -66,18 +71,22 @@ export default function AuthForm({ mode }) {
         !/[A-Z]/.test(password) ||
         !/[a-z]/.test(password)
       ) {
-        toast.error("Use at least 6 characters with an uppercase and a lowercase letter.")
+        toast.error("Use at least 6 characters with uppercase and lowercase letters.")
         return
       }
 
       payload.name = name
-      if (image) payload.image = image
+
+      if (!imageFile && image.trim()) {
+        payload.image = image.trim()
+      }
     }
 
     setPending("email")
 
     try {
       const endpoint = isSignUp ? "sign-up/email" : "sign-in/email"
+
       const response = await fetch(`${authUrl}/${endpoint}`, {
         method: "POST",
         credentials: "include",
@@ -85,17 +94,51 @@ export default function AuthForm({ mode }) {
         body: JSON.stringify(payload),
       })
 
+      const result = await response.json().catch(() => null)
+
       if (!response.ok) {
-        const result = await response.json().catch(() => null)
         toast.error(result?.message || "Unable to complete your request.")
         return
       }
+
+      let photoUploadFailed = false
+
+      if (isSignUp && imageFile) {
+        setPending("upload")
+
+        try {
+          const uploadedImage = await uploadProfilePhoto(imageFile)
+
+          const profileResponse = await fetch(`${apiUrl}/api/profile`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: payload.name,
+              image: uploadedImage,
+              phone: "",
+            }),
+          })
+
+          if (!profileResponse.ok) {
+            throw new Error()
+          }
+        } catch {
+          photoUploadFailed = true
+        }
+      }
+
       window.dispatchEvent(new Event("salonbook-auth-changed"))
 
+      if (photoUploadFailed) {
+        toast.error("Account created, but the photo could not be saved. Update it in My Profile.")
+      } else {
+        toast.success(
+          isSignUp ? "Your account has been created." : "Welcome back!"
+        )
+      }
 
-      
-      toast.success(isSignUp ? "Your account has been created." : "Welcome back!")
-      router.replace("/dashboard")
+      router.replace("/")
     } catch {
       toast.error("Could not reach SalonBook. Please try again.")
     } finally {
@@ -127,11 +170,16 @@ export default function AuthForm({ mode }) {
 
         <p className="auth-divider">or use email</p>
 
-        <form onSubmit={handleSubmit} aria-busy={pending === "email"}>
+        <form onSubmit={handleSubmit} aria-busy={busy}>
           {isSignUp && (
             <p>
               <label htmlFor="name">Full name</label>
-              <input id="name" name="name" autoComplete="name" required />
+              <input
+                id="name"
+                name="name"
+                autoComplete="name"
+                required
+              />
             </p>
           )}
 
@@ -158,25 +206,28 @@ export default function AuthForm({ mode }) {
             />
             {isSignUp && (
               <small id="password-help">
-                Use at least 6 characters, including an uppercase and a lowercase letter.
+                Use at least 6 characters, including an uppercase and lowercase letter.
               </small>
             )}
           </p>
 
           {isSignUp && (
-            <p>
-              <label htmlFor="image">Profile image URL (optional)</label>
-              <input
-                id="image"
-                name="image"
-                type="url"
-                placeholder="https://example.com/photo.jpg"
-              />
-            </p>
+            <ProfilePhotoInput
+              value={image}
+              onChange={setImage}
+              file={imageFile}
+              onFileChange={setImageFile}
+            />
           )}
 
           <button className="primary-action" type="submit" disabled={busy}>
-            {pending === "email" ? "Please wait…" : isSignUp ? "Create account" : "Sign in"}
+            {pending === "upload"
+              ? "Saving your photo…"
+              : pending === "email"
+                ? "Please wait…"
+                : isSignUp
+                  ? "Create Account"
+                  : "Sign In"}
           </button>
         </form>
 

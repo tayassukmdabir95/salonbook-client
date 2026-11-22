@@ -4,6 +4,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import styles from "./NavigationFooter.module.css"
+import SalonLogo from "./SalonLogo"
 
 function Icon({ name, size = 19 }) {
   const paths = {
@@ -72,9 +73,9 @@ export default function Footer() {
         <div className={styles.footerMain}>
           <div className={styles.footerBrandColumn}>
             <Link href="/" className={styles.footerBrand}>
-              <span className={styles.footerBrandMark}>✦</span>
-              Salon<span>Book.</span>
-            </Link>
+  <SalonLogo size={45} />
+  Salon<span>Book.</span>
+</Link>
 
             <p className={styles.footerDescription}>
               A beautiful way to book your next beauty experience.

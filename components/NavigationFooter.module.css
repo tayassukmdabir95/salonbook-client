@@ -1006,3 +1006,340 @@
     transform: none;
   }
 }
+
+
+
+
+.footer {
+  background: linear-gradient(
+    155deg,
+    #fcf8f2 0%,
+    #f9f1eb 55%,
+    #f0ebe0 100%
+  );
+  color: #463b38;
+}
+
+.footerGlow {
+  top: -200px;
+  right: -180px;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(
+    circle,
+    rgba(221, 167, 166, 0.18),
+    transparent 70%
+  );
+}
+
+.footerCta {
+  position: relative;
+  overflow: hidden;
+  margin-top: 48px;
+  padding: 48px;
+  border: 1px solid #efd9d2;
+  border-radius: 30px;
+  background: linear-gradient(
+    120deg,
+    #f4ded9 0%,
+    #f9eae2 55%,
+    #f0e9d8 100%
+  );
+  box-shadow: 0 12px 38px rgba(90, 60, 55, 0.055);
+}
+
+.footerCta::before {
+  position: absolute;
+  right: -95px;
+  bottom: -165px;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(157, 104, 102, 0.14);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.footerCta::after {
+  position: absolute;
+  right: -45px;
+  bottom: -115px;
+  width: 250px;
+  height: 250px;
+  border: 1px solid rgba(157, 104, 102, 0.12);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.footerCta > * {
+  position: relative;
+  z-index: 1;
+}
+
+.footerEyebrow {
+  margin-bottom: 14px;
+  color: #9b605c;
+  letter-spacing: 0.16em;
+}
+
+.footerSparkle {
+  color: #b97b78;
+}
+
+.footerCta h2 {
+  color: #463b38;
+  font-size: clamp(2.4rem, 4.7vw, 4.8rem);
+}
+
+.footerCta h2 em {
+  color: #a76678;
+}
+
+.footerCta p {
+  margin-top: 14px;
+  color: #776966;
+  line-height: 1.7;
+}
+
+.footerCtaButton {
+  min-width: 220px;
+  background: #445c4c;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(68, 92, 76, 0.15);
+}
+
+.footerCtaButton > span {
+  background: #dce9c9;
+  color: #445c4c;
+}
+
+.footerCtaButton:hover {
+  background: #304638;
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(68, 92, 76, 0.2);
+}
+
+.footerRule {
+  margin-top: 45px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #dbc8bf,
+    transparent
+  );
+}
+
+.footerMain {
+  gap: clamp(24px, 3vw, 50px);
+  padding: 55px 0 65px;
+}
+
+.footerBrand {
+  color: #463b38;
+  font-size: 2.15rem;
+}
+
+.footerBrand:hover {
+  color: #463b38;
+}
+
+.footerBrand > span:last-child {
+  color: #a76678;
+}
+
+.footerBrandMark {
+  color: #a76678;
+}
+
+.footerDescription {
+  margin-top: 16px;
+  color: #7c6c67;
+  line-height: 1.85;
+}
+
+.footerSocials {
+  gap: 10px;
+  margin-top: 23px;
+}
+
+.socialButton {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e7cdce;
+  border-radius: 13px;
+  background: #f9e7e6;
+  color: #a26373;
+  box-shadow: 0 3px 9px rgba(90, 60, 55, 0.04);
+}
+
+.socialButton:hover {
+  border-color: #a26373;
+  background: #a26373;
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0 9px 20px rgba(162, 99, 115, 0.19);
+}
+
+.footerColumnEyebrow {
+  color: #ad746a;
+  font-size: 0.67rem;
+}
+
+.footerColumn h3 {
+  margin-bottom: 20px;
+  color: #463b38;
+  font-size: 1.45rem;
+}
+
+.footerLinks {
+  gap: 7px;
+}
+
+.footerLink {
+  padding: 6px 9px 6px 0;
+  color: #776966;
+  font-weight: 650;
+}
+
+.footerLinkIcon {
+  border: 1px solid #ead8d0;
+  background: #f7e9e3;
+  color: #a0656c;
+}
+
+.footerLink:hover {
+  color: #a26373;
+}
+
+.footerLink:hover .footerLinkIcon {
+  border-color: #a26373;
+  background: #a26373;
+  color: white;
+}
+
+.footerLinkArrow {
+  color: #a26373;
+}
+
+.footerContactList {
+  gap: 20px;
+}
+
+.footerContactIcon {
+  border: 1px solid #e5d6c8;
+  background: #f3e9dc;
+  color: #9d7460;
+}
+
+.footerContactItem strong {
+  color: #51433d;
+}
+
+.footerContactItem p,
+.footerContactItem a {
+  color: #7b6c65;
+}
+
+.footerContactItem a:hover {
+  color: #a26373;
+}
+
+.footerHoursCard {
+  padding: 21px 18px;
+  border: 1px solid #d9e1d0;
+  border-radius: 19px;
+  background: linear-gradient(
+    145deg,
+    #e6eddb,
+    #f0f3e9
+  );
+  box-shadow: 0 7px 20px rgba(68, 92, 76, 0.045);
+}
+
+.footerHoursIcon {
+  margin-bottom: 15px;
+  background: #445c4c;
+  color: #ffffff;
+}
+
+.footerHoursRows {
+  gap: 13px;
+}
+
+.footerHoursRows span {
+  color: #647565;
+}
+
+.footerHoursRows strong {
+  color: #334c3c;
+}
+
+.footerHoursNote {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #ccd9c1;
+  color: #445c4c;
+}
+
+.footerStatusDot {
+  background: #679867;
+  box-shadow: 0 0 0 4px rgba(103, 152, 103, 0.14);
+}
+
+.footerBottom {
+  gap: 14px;
+  margin-bottom: 25px;
+  padding: 22px 25px;
+  border: 1px solid #eadcd5;
+  border-radius: 16px;
+  background: #f6eae4;
+  color: #84716c;
+}
+
+.footerBottom p span {
+  color: #b86b75;
+}
+
+.footerBack {
+  color: #845562;
+}
+
+.footerBack:hover {
+  color: #463b38;
+}
+
+@media (max-width: 1120px) {
+  .footerCta {
+    gap: 28px;
+  }
+}
+
+@media (max-width: 720px) {
+  .footerCta {
+    margin-top: 25px;
+    padding: 30px 23px;
+    border-radius: 22px;
+  }
+
+  .footerCta h2 {
+    font-size: clamp(2.2rem, 9vw, 3.4rem);
+  }
+
+  .footerMain {
+    gap: 35px;
+    padding: 45px 0;
+  }
+
+  .footerBottom {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socialButton:hover,
+  .footerCtaButton:hover,
+  .footerLink:hover {
+    transform: none;
+  }
+}

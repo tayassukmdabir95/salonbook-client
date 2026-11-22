@@ -170,3 +170,23 @@
     transform: none;
   }
 }
+
+
+
+
+.story {
+  width: min(100% - 64px, 1320px);
+  max-width: 1320px;
+  margin: 24px auto;
+  padding: 70px 48px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .story {
+    width: calc(100% - 36px);
+    padding: 45px 20px;
+    border-radius: 20px;
+  }
+}

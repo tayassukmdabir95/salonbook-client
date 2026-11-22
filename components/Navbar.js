@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import styles from "./NavigationFooter.module.css"
+import SalonLogo from "./SalonLogo"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -152,9 +153,9 @@ export default function Navbar() {
     <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
       <nav className={styles.nav} aria-label="Main navigation">
         <Link href="/" className={styles.brand}>
-          <span className={styles.brandMark}>✦</span>
-          <span>Salon<span className={styles.brandAccent}>Book.</span></span>
-        </Link>
+  <SalonLogo size={38} />
+  <span>Salon<span className={styles.brandAccent}>Book.</span></span>
+</Link>
 
         <div className={styles.navCenter}>
           <Link

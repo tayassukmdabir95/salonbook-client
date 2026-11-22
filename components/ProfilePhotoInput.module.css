@@ -1,0 +1,165 @@
+
+.wrapper {
+  display: grid;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #e6d4df;
+  border-radius: 20px;
+  background: #fffaf6;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.heading strong {
+  display: block;
+  color: #402440;
+  font-size: 1rem;
+}
+
+.heading p {
+  margin-top: 4px;
+  color: #8b7584;
+  font-size: 0.82rem;
+}
+
+.preview {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a87592, #402440);
+  color: white;
+  box-shadow: 0 5px 18px #301e3220;
+}
+
+.preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview span {
+  font-family: Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 13px;
+  background: #f1e8ed;
+}
+
+.tabs button {
+  min-height: 42px;
+  padding: 9px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #755e6e;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tabs button:hover {
+  color: #402440;
+}
+
+.tabs .active {
+  background: #402440;
+  color: white;
+}
+
+.tabs .active:hover {
+  color: white;
+}
+
+.uploadArea {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 22px 12px;
+  border: 2px dashed #d9bdce;
+  border-radius: 15px;
+  background: #fbf4f8;
+  text-align: center;
+}
+
+.uploadArea input {
+  width: 100%;
+  max-width: 280px;
+  padding: 8px;
+  border-radius: 9px;
+  background: white;
+  color: #402440;
+  font-size: 0.8rem;
+}
+
+.uploadArea span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: #402440;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.uploadArea small {
+  color: #8b7584;
+}
+
+.uploadArea button {
+  padding: 5px 10px;
+  border: 0;
+  background: transparent;
+  color: #a34440;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.urlField {
+  display: grid;
+  gap: 8px;
+  color: #402440;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.urlField input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 13px;
+  border: 1px solid #dbc8d4;
+  border-radius: 10px;
+  background: white;
+  color: #301e32;
+  font: inherit;
+  font-weight: 400;
+}
+
+.urlField input:focus {
+  outline: 2px solid #895b78;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 15px;
+  }
+
+  .tabs button {
+    font-size: 0.75rem;
+  }
+}

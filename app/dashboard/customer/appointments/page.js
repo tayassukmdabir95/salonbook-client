@@ -1,14 +1,17 @@
+
 "use client"
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
+import ConfirmDialog from "../../../../components/ConfirmDialog"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 function formatDate(value) {
   if (!value) return "—"
+
   return new Date(value).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -23,6 +26,7 @@ export default function MyAppointmentsPage() {
   const [error, setError] = useState("")
   const [cancellingId, setCancellingId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
+  const [confirmAppointment, setConfirmAppointment] = useState(null)
 
   async function loadAppointments() {
     const response = await fetch(`${apiUrl}/api/customer/appointments`, {
@@ -56,14 +60,22 @@ export default function MyAppointmentsPage() {
     })
   }, [])
 
-  async function cancelAppointment(appointment) {
-    if (
-      !window.confirm(
-        `Cancel your ${appointment.service?.serviceName || "salon"} appointment?`,
-      )
-    ) {
-      return
-    }
+  function openCancelConfirmation(appointment) {
+    if (cancellingId !== null) return
+
+    setConfirmAppointment(appointment)
+  }
+
+  function closeCancelConfirmation() {
+    if (cancellingId !== null) return
+
+    setConfirmAppointment(null)
+  }
+
+  async function cancelAppointment() {
+    if (!confirmAppointment || cancellingId !== null) return
+
+    const appointment = confirmAppointment
 
     setCancellingId(appointment._id)
 
@@ -73,25 +85,31 @@ export default function MyAppointmentsPage() {
         {
           method: "PATCH",
           credentials: "include",
-        },
+        }
       )
 
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.message)
+        throw new Error(result.message || "Could not cancel the appointment.")
       }
 
+      setConfirmAppointment(null)
       toast.success("Appointment cancelled.")
+
       await loadAppointments()
     } catch (cancelError) {
-      toast.error(cancelError.message || "Could not cancel the appointment.")
+      toast.error(
+        cancelError.message || "Could not cancel the appointment."
+      )
     } finally {
       setCancellingId(null)
     }
   }
 
   async function payAppointment(appointment) {
+    if (cancellingId !== null) return
+
     setCancellingId(appointment._id)
 
     try {
@@ -100,7 +118,7 @@ export default function MyAppointmentsPage() {
         {
           method: "POST",
           credentials: "include",
-        },
+        }
       )
 
       const result = await response.json()
@@ -111,26 +129,43 @@ export default function MyAppointmentsPage() {
 
       window.location.assign(result.url)
     } catch (paymentError) {
-      toast.error(paymentError.message || "Could not start payment.")
+      toast.error(
+        paymentError.message || "Could not start payment."
+      )
+
       setCancellingId(null)
     }
   }
 
   return (
     <main className="appointments-page">
-      <Link href="/dashboard/customer">← Customer overview</Link>
+      <Link href="/dashboard/customer">
+        ← Customer overview
+      </Link>
+
       <div className="appointments-heading">
         <div>
           <p className="eyebrow">Your salon visits</p>
           <h1>My appointments</h1>
         </div>
+
         <Link className="primary-action" href="/services">
           Browse services
         </Link>
       </div>
 
-      {loading && <p role="status">Loading your appointments…</p>}
-      {error && <p role="alert">{error}</p>}
+      {loading && (
+        <p role="status">
+          Loading your appointments…
+        </p>
+      )}
+
+      {error && (
+        <p role="alert">
+          {error}
+        </p>
+      )}
+
       {!loading && !error && appointments.length === 0 && (
         <p>You have no appointment requests yet.</p>
       )}
@@ -139,35 +174,63 @@ export default function MyAppointmentsPage() {
         {appointments.map((appointment) => {
           const service = appointment.service
           const expanded = expandedId === appointment._id
+          const isBusy = cancellingId === appointment._id
 
           return (
-            <article className="appointment-card" key={appointment._id}>
+            <article
+              className="appointment-card"
+              key={appointment._id}
+            >
               {service?.image && (
-                <img src={service.image} alt="" />
+                <img
+                  src={service.image}
+                  alt={service.serviceName || "Salon service"}
+                />
               )}
 
               <div className="appointment-card-content">
                 <div className="appointment-card-title">
                   <div>
-                    <p className="eyebrow">{service?.category || "Salon service"}</p>
-                    <h2>{service?.serviceName || "Service unavailable"}</h2>
+                    <p className="eyebrow">
+                      {service?.category || "Salon service"}
+                    </p>
+
+                    <h2>
+                      {service?.serviceName || "Service unavailable"}
+                    </h2>
                   </div>
-                  <span className={`appointment-status status-${appointment.status}`}>
+
+                  <span
+                    className={`appointment-status status-${appointment.status}`}
+                  >
                     {appointment.status}
                   </span>
                 </div>
 
                 <div className="appointment-facts">
-                  <span>Date: {appointment.appointmentDate}</span>
-                  <span>Time: {appointment.timeSlot}</span>
-                  <span>Price: ${Number(appointment.servicePrice).toFixed(2)}</span>
-                  <span>Payment: {appointment.paymentStatus}</span>
+                  <span>
+                    Date: {appointment.appointmentDate}
+                  </span>
+
+                  <span>
+                    Time: {appointment.timeSlot}
+                  </span>
+
+                  <span>
+                    Price: ${Number(appointment.servicePrice).toFixed(2)}
+                  </span>
+
+                  <span>
+                    Payment: {appointment.paymentStatus}
+                  </span>
                 </div>
 
                 <div className="appointment-actions">
                   <button
                     type="button"
-                    onClick={() => setExpandedId(expanded ? null : appointment._id)}
+                    onClick={() =>
+                      setExpandedId(expanded ? null : appointment._id)
+                    }
                     aria-expanded={expanded}
                   >
                     {expanded ? "Hide details" : "View details"}
@@ -176,10 +239,10 @@ export default function MyAppointmentsPage() {
                   {appointment.status === "pending" && (
                     <button
                       type="button"
-                      disabled={cancellingId === appointment._id}
-                      onClick={() => cancelAppointment(appointment)}
+                      disabled={cancellingId !== null}
+                      onClick={() => openCancelConfirmation(appointment)}
                     >
-                      {cancellingId === appointment._id
+                      {isBusy
                         ? "Cancelling…"
                         : "Cancel request"}
                     </button>
@@ -189,10 +252,10 @@ export default function MyAppointmentsPage() {
                     appointment.paymentStatus === "unpaid" && (
                       <button
                         type="button"
-                        disabled={cancellingId === appointment._id}
+                        disabled={cancellingId !== null}
                         onClick={() => payAppointment(appointment)}
                       >
-                        {cancellingId === appointment._id
+                        {isBusy
                           ? "Opening Stripe…"
                           : "Pay Now"}
                       </button>
@@ -201,11 +264,22 @@ export default function MyAppointmentsPage() {
 
                 {expanded && (
                   <div className="appointment-extra">
-                    <p>Requested: {formatDate(appointment.createdAt)}</p>
-                    <p>Appointment status: {appointment.status}</p>
-                    <p>Payment status: {appointment.paymentStatus}</p>
+                    <p>
+                      Requested: {formatDate(appointment.createdAt)}
+                    </p>
+
+                    <p>
+                      Appointment status: {appointment.status}
+                    </p>
+
+                    <p>
+                      Payment status: {appointment.paymentStatus}
+                    </p>
+
                     {appointment.message && (
-                      <p>Your message: {appointment.message}</p>
+                      <p>
+                        Your message: {appointment.message}
+                      </p>
                     )}
                   </div>
                 )}
@@ -214,6 +288,20 @@ export default function MyAppointmentsPage() {
           )
         })}
       </div>
+
+      <ConfirmDialog
+        open={Boolean(confirmAppointment)}
+        title="Cancel your appointment?"
+        message={`Are you sure you want to cancel your ${
+          confirmAppointment?.service?.serviceName || "salon"
+        } appointment? This action may not be reversible.`}
+        confirmText="Yes, Cancel"
+        cancelText="Keep Appointment"
+        variant="danger"
+        loading={cancellingId !== null}
+        onConfirm={cancelAppointment}
+        onCancel={closeCancelConfirmation}
+      />
     </main>
   )
 }
