@@ -854,9 +854,7 @@
     height: 52px;
   }
 
-  .join {
-    display: none;
-  }
+
 
   .signin {
     font-size: 0.85rem;
@@ -1341,5 +1339,36 @@
   .footerCtaButton:hover,
   .footerLink:hover {
     transform: none;
+  }
+}
+
+
+
+@media (max-width: 720px) {
+  .guestActions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: nowrap;
+  }
+
+  .signin {
+    padding: 8px 5px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .join {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 36px;
+    padding: 8px 11px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .join svg {
+    display: none;
   }
 }
